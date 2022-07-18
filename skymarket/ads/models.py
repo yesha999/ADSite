@@ -9,7 +9,8 @@ class Ad(models.Model):
     price = models.PositiveIntegerField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(null=True, blank=True)
 
     class Meta:
         ordering = ['created_at']

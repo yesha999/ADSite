@@ -90,6 +90,10 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+
+JWT_AUTH = {
+    'JWT_AUTH_HEADER_PREFIX': 'BEARER',
+}
 DJOSER = {
     'SERIALIZERS': {
         'user_create': 'users.serializers.UserRegistrationSerializer'

@@ -18,6 +18,7 @@ class User(AbstractBaseUser):
     role = models.CharField(max_length=9, choices=UserRoles.ROLES, default='user')
     email = models.EmailField(unique=True)
     image = models.ImageField(upload_to='images/', null=True, blank=True)
+    is_active = models.BooleanField(default=True)
 
     @property
     def is_superuser(self):
