@@ -17,7 +17,7 @@ class User(AbstractBaseUser):
     phone = PhoneNumberField()
     role = models.CharField(max_length=9, choices=UserRoles.ROLES, default='user')
     email = models.EmailField(unique=True)
-    image = models.ImageField(upload_to='images/', null=True, blank=True)
+    image = models.ImageField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
     @property

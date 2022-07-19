@@ -1,11 +1,11 @@
 from ads.models import Ad, Comment
+from ads.permissions import AdUpdatePermission, AdDeletePermission
 from ads.serializers import AdListMeSerializer
 from ads.serializers import AdSerializer, CommentSerializer
+from django.shortcuts import get_object_or_404
 from rest_framework import pagination, viewsets
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
-
-from ads.permissions import AdUpdatePermission, AdDeletePermission
 
 
 class AdPagination(pagination.PageNumberPagination):
@@ -51,7 +51,9 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         user = self.request.user
-        serializer.save(author=user)
+        ad_id = self.kwargs.get("ad_id")
+        ad = get_object_or_404(Ad, pk=ad_id)
+        serializer.save(author=user, ad=ad)
 
     def get_permissions(self):
         permission_classes = [IsAuthenticated]
