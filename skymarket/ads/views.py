@@ -3,6 +3,9 @@ from ads.serializers import AdListMeSerializer
 from ads.serializers import AdSerializer, CommentSerializer
 from rest_framework import pagination, viewsets
 from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAuthenticated
+
+from ads.permissions import AdUpdatePermission, AdDeletePermission
 
 
 class AdPagination(pagination.PageNumberPagination):
@@ -13,18 +16,29 @@ class AdViewSet(viewsets.ModelViewSet):
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
 
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(author=user)
+
+    def get_permissions(self):
+        if self.action == 'list' or 'retrieve':
+            permission_classes = []
+        else:
+            permission_classes = [IsAuthenticated]
+            if self.action == 'destroy':
+                permission_classes.append(AdDeletePermission)
+            if self.action == 'update' or "partial_update":
+                permission_classes.append(AdUpdatePermission)
+        return [permission() for permission in permission_classes]
+
 
 class AdListMeView(ListAPIView):
     serializer_class = AdListMeSerializer
 
     def get_queryset(self):
         user = self.request.user
-        print("ниже будет юзер пк")
-        print(user.pk)
         new_queryset = Ad.objects.filter(author=user.pk)
         return new_queryset
-
-    # permission_classes = [IsAuthenticated]
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -34,3 +48,16 @@ class CommentViewSet(viewsets.ModelViewSet):
         ad_id = self.kwargs.get("ad_id")
         new_queryset = Comment.objects.filter(ad=ad_id)
         return new_queryset
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(author=user)
+
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated]
+        if self.action == 'destroy':
+            permission_classes.append(AdDeletePermission)
+        if self.action == 'update' or "partial_update":
+            permission_classes.append(AdUpdatePermission)
+
+        return [permission() for permission in permission_classes]
