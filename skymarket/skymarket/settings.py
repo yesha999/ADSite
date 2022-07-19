@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework.authtoken",
-    "rest_framework_simplejwt",
+    # "rest_framework_simplejwt",
     "djoser",
     "corsheaders",
     "users",
@@ -91,18 +91,11 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-JWT_AUTH = {
-    'JWT_AUTH_HEADER_PREFIX': 'BEARER',
-}
 DJOSER = {
     'SERIALIZERS': {
         'user_create': 'users.serializers.UserRegistrationSerializer'
     },
     'LOGIN_FIELD': 'email'
-}
-
-SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('JWT',)
 }
 
 # Database
