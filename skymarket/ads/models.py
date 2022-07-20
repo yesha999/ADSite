@@ -21,6 +21,9 @@ class Comment(models.Model):
     ad = models.ForeignKey(Ad, on_delete=models.CASCADE, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-created_at']
+
 
 class AdFilter(django_filters.rest_framework.FilterSet):
     title = django_filters.CharFilter(field_name="title", lookup_expr="icontains", )
