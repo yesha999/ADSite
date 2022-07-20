@@ -1,8 +1,10 @@
 from ads.models import Ad, Comment
+from ads.models import AdFilter
 from ads.permissions import AdUpdatePermission, AdDeletePermission
 from ads.serializers import AdListMeSerializer
 from ads.serializers import AdSerializer, CommentSerializer
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import pagination, viewsets
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -15,6 +17,8 @@ class AdPagination(pagination.PageNumberPagination):
 class AdViewSet(viewsets.ModelViewSet):
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
+    filter_backends = (DjangoFilterBackend,)  # Подключаем библотеку, отвечающую за фильтрацию к CBV
+    filterset_class = AdFilter  # Выбираем наш фильтр
 
     def perform_create(self, serializer):
         user = self.request.user

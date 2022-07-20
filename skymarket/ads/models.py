@@ -1,6 +1,5 @@
-from django.conf import settings
+import django_filters
 from django.db import models
-
 from users.models import User
 
 
@@ -17,9 +16,15 @@ class Ad(models.Model):
 
 
 class Comment(models.Model):
-
     text = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
     ad = models.ForeignKey(Ad, on_delete=models.CASCADE, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+
+class AdFilter(django_filters.rest_framework.FilterSet):
+    title = django_filters.CharFilter(field_name="title", lookup_expr="icontains", )
+
+    class Meta:
+        model = Ad
+        fields = ("title",)
